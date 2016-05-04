@@ -29,28 +29,12 @@ router.route('/:id')
   })
 
 router.put('/:user1/addFriend/:user2', (req, res) => {
-
-  User.friendify(req.params.user1, req.params.user2, err => {
-
-  })
-
-
-  // User.findById(req.params.user1, (err1, user1) => {
-  //   User.findById(req.params.user2, (err2, user2) => {
-  //     if(err1 || err2) return res.status(400).send(err1 || err2);
-
-  //     user1.friends.push(user2._id);
-  //     user2.friends.push(user1._id);
-
-  //     user1.save((err1) => {
-  //       user2.save((err2) => {
-  //         res.status(err1 || err2 ? 400 : 200).send(err1 || err2)
-  //       });
-  //     });
-  //   });
-  // });
+  User.friendify(req.params.user1, req.params.user2, res.handle);
 });
 
+router.put('/:user1/removeFriend/:user2', (req, res) => {
+  User.unfriendify(req.params.user1, req.params.user2, res.handle);
+});
 
 router.put('/:userId/read/:bookId', (req, res) => {
   var userId = req.params.userId;
