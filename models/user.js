@@ -11,6 +11,9 @@ var userSchema = new mongoose.Schema({
 });
 
 userSchema.statics.friendify = function(user1Id, user2Id, cb) {
+  if(user1Id === user2Id) {
+    return cb({error: "You can't be your own friend!"})
+  }
   User.findById(user1Id, (err1, user1) => {
     User.findById(user2Id, (err2, user2) => {
       if(err1 || err2) return cb(err1 || err2);

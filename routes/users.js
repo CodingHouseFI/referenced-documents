@@ -9,7 +9,6 @@ router.route('/')
   .get((req, res) => {
     User
       .find({})
-      .populate('books friends')
       .exec((err, users) => {
         res.status(err ? 400 : 200).send(err || users);
       });
@@ -26,7 +25,32 @@ router.route('/:id')
       .findById(req.params.id)
       .populate('books friends')
       .exec(res.handle)
-  })
+  });
+
+
+
+router.get('/:id/potential', (req, res) => {
+
+  // get all users that i'm not friends with, and aren't me
+
+  User
+    .findById(req.params.id)
+    .exec((err, user) => {
+      if(err) return res.handle(err);
+
+      User.find({
+        _id: {
+          $nin: user.friends,
+          $ne: user._id
+        }
+      }, res.handle);
+
+    });
+})
+
+
+
+
 
 router.put('/:user1/addFriend/:user2', (req, res) => {
   User.friendify(req.params.user1, req.params.user2, res.handle);
