@@ -27,6 +27,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+
+  res.handle = (err, data) => {
+    console.log('res.handle!', err, data);
+    res.status(err ? 400 : 200).send(err || data);
+  };
+
+  next();
+});
+
 app.use('/', require('./routes/index'));
 app.use('/api', require('./routes/api'));
 
